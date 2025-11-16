@@ -1,0 +1,38 @@
+zabbix_export:
+  version: '7.4'
+  template_groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    - uuid: 15c0827fb39244638ec3b8c50602b918
+      template: 'Website Monitor by HTTP'
+      name: 'Website Monitor by HTTP'
+      groups:
+        - name: Templates
+      httptests:
+        - uuid: eea59c18bf0b4e30924f4ef62bfe81bb
+          name: 'Website Health Check: {$WEB.URL}'
+          attempts: '2'
+          steps:
+            - name: 'Website Availability'
+              url: '{$WEB.URL}'
+              status_codes: '{$WEB.STATUS_CODES}'
+      macros:
+        - macro: '{$WEB.URL}'
+          description: '<https://www.example.com>'
+        - macro: '{$WEB.STATUS_CODES}'
+          value: '200'
+        - macro: '{$WEB.MAX_DELAY}'
+          value: '0.300'
+          description: 'Value in seconds'
+  triggers:
+    - uuid: c63c6a0e023f4273b26af007e7238553
+      expression: 'avg(/Website Monitor/web.test.time[Website Health Check: {$WEB.URL},Website Availability,resp],10m)>{$WEB.MAX_DELAY}'
+      recovery_mode: RECOVERY_EXPRESSION
+      recovery_expression: 'avg(/Website Monitor/web.test.time[Website Health Check: {$WEB.URL},Website Availability,resp],10m)<{$WEB.MAX_DELAY}'
+      name: 'Website response is slow: ({ITEM.LASTVALUE})ms - {$WEB.URL}'
+      priority: WARNING
+    - uuid: 21e666b60e5a4689bdb5bdc96d79c980
+      expression: 'last(/Website Monitor/web.test.fail[Website Health Check: {$WEB.URL}])<>0'
+      name: 'Website Not Available: {$WEB.URL}'
+      priority: HIGH
