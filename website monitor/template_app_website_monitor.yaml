@@ -1,5 +1,5 @@
 zabbix_export:
-  version: '7'
+  version: '7.2'
   template_groups:
     - uuid: 7df96b18c230490a9a0a9e2307226338
       name: Templates
@@ -7,6 +7,17 @@ zabbix_export:
     - uuid: 15c0827fb39244638ec3b8c50602b918
       template: 'Website Monitor by HTTP'
       name: 'Website Monitor by HTTP'
+      description: |
+        Written by Joe @ The Smart Workshop
+        youtube.com/@TheSmartWorkshop
+        thesmartworkshop.net
+
+        Template to monitor websites or any web interface.
+        - Provides Macros to specify URL to monitor
+        - Defaults to status code 200, adjustable via Macro
+        - Default HTTP response time for a site to be considered 'SLOW' = 300ms, adjustable via Macro.
+        - Includes triggers for both up/down alerting, and a site with slow response under threshold.
+        
       groups:
         - name: Templates
       httptests:
