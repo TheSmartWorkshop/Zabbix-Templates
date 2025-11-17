@@ -41,7 +41,7 @@ zabbix_export:
       expression: 'avg(/Website Monitor by HTTP/web.test.time[Website Health Check: {$WEB.URL},Website Availability,resp],10m)>{$WEB.MAX_DELAY}'
       recovery_mode: RECOVERY_EXPRESSION
       recovery_expression: 'avg(/Website Monitor by HTTP/web.test.time[Website Health Check: {$WEB.URL},Website Availability,resp],10m)<{$WEB.MAX_DELAY}'
-      name: 'Website response is slow: ({ITEM.LASTVALUE})ms - {$WEB.URL}'
+      name: 'Website response is slow: ({ITEM.LASTVALUE}) - {$WEB.URL}'
       priority: WARNING
     - uuid: 21e666b60e5a4689bdb5bdc96d79c980
       expression: 'last(/Website Monitor by HTTP/web.test.fail[Website Health Check: {$WEB.URL}])<>0'
