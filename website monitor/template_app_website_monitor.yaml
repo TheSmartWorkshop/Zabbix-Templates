@@ -16,6 +16,7 @@ zabbix_export:
         - Provides Macros to specify URL to monitor
         - Defaults to status code 200, adjustable via Macro
         - Default HTTP response time for a site to be considered 'SLOW' = 300ms, adjustable via Macro.
+        - adjustable 'attempts' count. Useful to tune out quick service restarts. Defaults to 2.
         - Includes triggers for both up/down alerting, and a site with slow response under threshold.
 
       groups:
@@ -23,7 +24,7 @@ zabbix_export:
       httptests:
         - uuid: eea59c18bf0b4e30924f4ef62bfe81bb
           name: 'Website Health Check: {$WEB.URL}'
-          attempts: '2'
+          attempts: '{$WEB.ATTEMPTS}'
           steps:
             - name: 'Website Availability'
               url: '{$WEB.URL}'
@@ -36,6 +37,10 @@ zabbix_export:
         - macro: '{$WEB.MAX_DELAY}'
           value: '0.300'
           description: 'Value in seconds'
+        - macro: '{$WEB.ATTEMPTS}'
+          value: '2'
+          description: 'Number of attempts before reporting failure'
+          
   triggers:
     - uuid: c63c6a0e023f4273b26af007e7238553
       expression: 'avg(/Website Monitor by HTTP/web.test.time[Website Health Check: {$WEB.URL},Website Availability,resp],10m)>{$WEB.MAX_DELAY}'
